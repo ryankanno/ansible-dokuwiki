@@ -1,0 +1,30 @@
+---
+  - name: dokuwiki | dokuwiki_os_debian7.yml | create dokuwiki group
+    group: name=dokuwiki system=yes state=present
+    tags: dokuwiki
+
+  - name: dokuwiki | dokuwiki_os_debian7.yml | create dokuwiki user
+    user:
+      name: dokuwiki
+      group: dokuwiki
+      createhome: no
+      shell: /bin/false
+      system: yes
+      state: present
+    tags: dokuwiki
+
+  # - Create following dirs: src_dir, target_dir
+  # - Download stable to /tmp
+  # - Unpack stable to src structure
+  # - Copy to target_dir (where all the work will occur)
+  # - Create symlinks in /app structure (or some custom structure)
+
+  - name: dokuwiki | dokuwiki_os_debian7.yml | download latest stable dokuwiki
+    get_url:
+      url: 'http://download.dokuwiki.org/src/dokuwiki/dokuwiki-stable.tgz'
+      dest: ""
+    tags: dokuwiki
+
+  - name: dokuwiki | dokuwiki_os_debian7.yml | unpack dokuwiki source
+    command: tar -xvzf chdir=/tmp creates=
+    tags: dokuwiki

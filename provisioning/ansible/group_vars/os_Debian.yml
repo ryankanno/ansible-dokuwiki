@@ -1,0 +1,11 @@
+# nginx
+
+nginx:
+  package: nginx
+  version: 1.2.1-2.2+wheezy3
+
+# dokuwiki
+
+dokuwiki:
+  package: openssl
+  version: 1.0.1e-2+deb7u16

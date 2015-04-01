@@ -1,0 +1,14 @@
+---
+
+- hosts: all
+  sudo: True
+  gather_facts: True
+  tasks:
+     - group_by: key=os_{{ ansible_distribution }}
+
+- hosts: os_Debian
+  sudo: True
+  gather_facts: True
+  roles:
+   - nginx
+   - dokuwiki
