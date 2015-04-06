@@ -1,0 +1,4 @@
+---
+  - name: comoon | common_os_debian7.yml | update apt
+    apt: update_cache=yes cache_valid_time=3600
+    tags: common

@@ -1,0 +1,24 @@
+# {{ ansible_managed }}
+
+server {
+    listen 80;
+    root /var/www/dokuwiki;
+
+    index index.php index.html doku.php;
+
+    location ~ /(data|conf|bin|inc)/ {
+        deny all;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+
+    location ~ \.php {
+        fastcgi_index index.php;
+        fastcgi_split_path_info ^(.+\.php)(.*)$;
+        include /etc/nginx/fastcgi_params;
+        fastcgi_pass unix:/var/run/php5-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+}

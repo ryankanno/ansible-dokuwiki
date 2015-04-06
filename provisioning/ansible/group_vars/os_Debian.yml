@@ -1,11 +1,18 @@
+# common
+
 # nginx
 
 nginx:
   package: nginx
   version: 1.2.1-2.2+wheezy3
 
+# php5-fpm
+
+php5_fpm:
+  package: 'php5-fpm'
+  version: 5.4.39-0+deb7u2
+
 # dokuwiki
 
 dokuwiki:
-  package: openssl
-  version: 1.0.1e-2+deb7u16
+  version: 2014-09-29d

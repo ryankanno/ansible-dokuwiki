@@ -16,6 +16,14 @@ Just a tiny repository to help install Dokuwiki everywhere
 
 `vagrant up`
 
+The guest's port 80 is being forwarded to the host's port 50000.
+
+    config.vm.network "forwarded_port", guest: 80, host: 50000, auto_correct: true
+
+To play with the install from your machine,
+
+`curl http://127.0.0.1:50000/install.php`
+
 # TODO
 
 * farm/farmer setup

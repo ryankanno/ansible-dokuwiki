@@ -10,5 +10,7 @@
   sudo: True
   gather_facts: True
   roles:
-   - nginx
+   - common
+   - { role: nginx, nginx: { vhosts: [{path: 'roles/dokuwiki/templates/dokuwiki.j2', name: dokuwiki}]}}
+   - php5-fpm
    - dokuwiki

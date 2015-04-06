@@ -13,6 +13,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.hostname = 'dokuwiki.local'
   config.vm.network "private_network", ip: "192.168.50.50"
+  config.vm.network "forwarded_port", guest: 80, host: 50000, auto_correct: true
 
   config.vm.provision :ansible do |ansible|
     ansible.playbook = "provisioning/ansible/site.yml"

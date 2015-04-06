@@ -7,24 +7,39 @@
     user:
       name: dokuwiki
       group: dokuwiki
-      createhome: no
+      createhome: yes
       shell: /bin/false
-      system: yes
+      system: no
       state: present
     tags: dokuwiki
 
-  # - Create following dirs: src_dir, target_dir
-  # - Download stable to /tmp
-  # - Unpack stable to src structure
-  # - Copy to target_dir (where all the work will occur)
-  # - Create symlinks in /app structure (or some custom structure)
+  - name: dokuwiki | dokuwiki_os_debian7.yml | ensure dokuwiki downloads directory exists
+    file: path=/home/dokuwiki/apps/dokuwiki/downloads state=directory owner=dokuwiki group=dokuwiki
 
-  - name: dokuwiki | dokuwiki_os_debian7.yml | download latest stable dokuwiki
+  - name: dokuwiki | dokuwiki_os_debian7.yml | ensure dokuwiki src directory exists
+    file: path=/home/dokuwiki/apps/dokuwiki/src state=directory owner=dokuwiki group=dokuwiki
+
+  - name: dokuwiki | dokuwiki_os_debian7.yml | download dokuwiki
     get_url:
-      url: 'http://download.dokuwiki.org/src/dokuwiki/dokuwiki-stable.tgz'
-      dest: ""
+      url: "http://download.dokuwiki.org/src/dokuwiki/dokuwiki-{{ dokuwiki.version }}.tgz"
+      dest: "/home/dokuwiki/apps/dokuwiki/downloads/"
+    remote_user: dokuwiki
+    register: new_dokuwiki_version
     tags: dokuwiki
 
   - name: dokuwiki | dokuwiki_os_debian7.yml | unpack dokuwiki source
-    command: tar -xvzf chdir=/tmp creates=
+    unarchive:
+      src: "/home/dokuwiki/apps/dokuwiki/downloads/dokuwiki-{{ dokuwiki.version }}.tgz"
+      dest: '/home/dokuwiki/apps/dokuwiki/src'
+      copy: no
+    remote_user: dokuwiki
+    when: new_dokuwiki_version|changed
+    tags: dokuwiki
+
+  - name: dokuwiki | dokuwiki_os_debian7.yml | ensure www dir exists
+    file: path=/var/www state=directory owner=www-data group=www-data
+    tags: dokuwiki
+
+  - name: dokuwiki | dokuwiki_os_debian7.yml | ensure dokuwiki www symlink exists
+    file: src="/home/dokuwiki/apps/dokuwiki/src/dokuwiki-{{ dokuwiki.version }}" dest=/var/www/dokuwiki state=link owner=dokuwiki group=www-data
     tags: dokuwiki
