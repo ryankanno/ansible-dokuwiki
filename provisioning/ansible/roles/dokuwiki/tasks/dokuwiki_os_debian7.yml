@@ -43,3 +43,11 @@
   - name: dokuwiki | dokuwiki_os_debian7.yml | ensure dokuwiki www symlink exists
     file: src="/home/dokuwiki/apps/dokuwiki/src/dokuwiki-{{ dokuwiki.version }}" dest=/var/www/dokuwiki state=link owner=dokuwiki group=www-data
     tags: dokuwiki
+
+  - name: dokuwiki | dokuwiki_os_debian7.yml | ensure dokuwiki conf directory is writable
+    file: path=/var/www/dokuwiki/conf state=directory owner=dokuwiki group=www-data mode=0775 recurse=yes
+    tags: dokuwiki
+
+  - name: dokuwiki | dokuwiki_os_debian7.yml | ensure dokuwiki data directory is writable
+    file: path=/var/www/dokuwiki/data state=directory owner=dokuwiki group=www-data mode=0775 recurse=yes
+    tags: dokuwiki
