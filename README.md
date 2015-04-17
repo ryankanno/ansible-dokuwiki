@@ -22,8 +22,8 @@ The guest's port 80 is being forwarded to the host's port 50000.
 
 To play with the install from your machine,
 
-`curl http://127.0.0.1:50000/install.php`
+`curl http://127.0.0.1:50000/`
 
 # TODO
 
-* farm/farmer setup
+* Add SSL
