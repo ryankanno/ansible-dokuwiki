@@ -1,7 +1,6 @@
 ---
   - name: dokuwiki | dokuwiki_os_debian7.yml | create dokuwiki group
     group: name=dokuwiki system=yes state=present
-    tags: dokuwiki
 
   - name: dokuwiki | dokuwiki_os_debian7.yml | create dokuwiki user
     user:
@@ -11,7 +10,6 @@
       shell: /bin/false
       system: no
       state: present
-    tags: dokuwiki
 
   - name: dokuwiki | dokuwiki_os_debian7.yml | ensure dokuwiki downloads directory exists
     file: path=/home/dokuwiki/apps/dokuwiki/downloads state=directory owner=dokuwiki group=dokuwiki
@@ -22,7 +20,6 @@
   - name: dokuwiki | dokuwiki_os_debian7.yml | stat dokuwiki download
     stat: path=/home/dokuwiki/apps/dokuwiki/downloads/dokuwiki-{{ dokuwiki.version }}.tgz
     register: download_stat
-    tags: dokuwiki
 
   - name: dokuwiki | dokuwiki_os_debian7.yml | download dokuwiki
     get_url:
@@ -31,7 +28,6 @@
     remote_user: dokuwiki
     register: new_dokuwiki_version
     when: not download_stat.stat.exists
-    tags: dokuwiki
 
   - name: dokuwiki | dokuwiki_os_debian7.yml | unpack dokuwiki source
     unarchive:
@@ -40,58 +36,49 @@
       copy: no
     remote_user: dokuwiki
     when: new_dokuwiki_version.changed
-    tags: dokuwiki
 
   - name: dokuwiki | dokuwiki_os_debian7.yml | ensure www dir exists
     file: path=/var/www state=directory owner=www-data group=www-data
-    tags: dokuwiki
 
   - name: dokuwiki | dokuwiki_os_debian7.yml | ensure dokuwiki www symlink exists
     file: src="/home/dokuwiki/apps/dokuwiki/src/dokuwiki-{{ dokuwiki.version }}" dest=/var/www/dokuwiki state=link owner=dokuwiki group=www-data
-    tags: dokuwiki
 
   - name: dokuwiki | dokuwiki_os_debian7.yml | ensure dokuwiki conf directory is writable
     file: path=/var/www/dokuwiki/conf state=directory owner=dokuwiki group=www-data mode=0775 recurse=yes
-    tags: dokuwiki
 
   - name: dokuwiki | dokuwiki_os_debian7.yml | ensure dokuwiki data directory is writable
     file: path=/var/www/dokuwiki/data state=directory owner=dokuwiki group=www-data mode=0775 recurse=yes
-    tags: dokuwiki
 
   - name: dokuwiki | dokuwiki_os_debian7.yml | ensure dokuwiki farm directory exists
     file: path=/var/www/farm state=directory owner=www-data group=www-data
-    tags: dokuwiki
 
   - name: dokuwiki | dokuwiki_os_debian7.yml | stat preload.php.dist
     stat: path=/var/www/dokuwiki/inc/preload.php.dist
     register: preload_stat
-    tags: dokuwiki
 
   - name: dokuwiki | dokuwiki_os_debian7.yml | copy preload.php.dist to preload.php
     command: cp /var/www/dokuwiki/inc/preload.php.dist /var/www/dokuwiki/inc/preload.php creates=/var/www/dokuwiki/inc/preload.php
     when: preload_stat.stat.exists
-    tags: dokuwiki
 
   - name: dokuwiki | dokuwiki_os_debian7.yml | enable DOKU_FARMDIR in preload.php file
     lineinfile: dest=/var/www/dokuwiki/inc/preload.php
                 regexp="^//if\(!defined\('DOKU_FARMDIR'\)\)"
                 insertafter="^//if\(!defined\('DOKU_FARMDIR'\)\)"
-                line="if(!defined('DOKU_FARMDIR')) define('DOKU_FARMDIR', '/var/www/farm')"
+                line="if(!defined('DOKU_FARMDIR')) define('DOKU_FARMDIR', '/var/www/farm');"
+                backrefs=yes
                 state=present
-    tags: dokuwiki
 
   - name: dokuwiki | dokuwiki_os_debian7.yml | enable farms in preload.php file
     lineinfile: dest=/var/www/dokuwiki/inc/preload.php
                 regexp="^//include\(fullpath\(dirname\(__FILE__\)\)"
                 insertafter="^//include\(fullpath\(dirname\(__FILE__\)\)"
                 line="include(fullpath(dirname(__FILE__)).'/farm.php');"
+                backrefs=yes
                 state=present
-    tags: dokuwiki
 
   - name: dokuwiki | dokuwiki_os_debian7.yml | stat farm animal download
     stat: path=/home/dokuwiki/apps/dokuwiki/downloads/dokuwiki_farm_animal.zip
     register: dokuwiki_farm_stat
-    tags: dokuwiki
 
   - name: dokuwiki | dokuwiki_os_debian7.yml | download farm animal template
     get_url:
@@ -100,13 +87,11 @@
     remote_user: dokuwiki
     register: new_farm_version
     when: not dokuwiki_farm_stat.stat.exists
-    tags: dokuwiki
 
   - name: dokuwiki | dokuwiki_os_debian7.yml | ensure farm directories exist
     file: path=/var/www/farm/{{ item }} state=directory owner=dokuwiki group=www-data mode=0775 recurse=yes
     remote_user: dokuwiki
     with_items: dokuwiki.farms
-    tags: dokuwiki
 
   - name: dokuwiki | dokuwiki_os_debian7.yml | unzip template into each farm
     unarchive:
@@ -120,16 +105,13 @@
     remote_user: dokuwiki
     with_items: dokuwiki.farms
     register: farm_template_unzipped
-    tags: dokuwiki
 
   - name: dokuwiki | dokuwiki_os_debian7.yml | copy over contents from _animal
     shell: mv /var/www/farm/{{ item }}/_animal/* /var/www/farm/{{ item }}/ creates=/var/www/farm/{{ item }}/README
     remote_user: dokuwiki
     with_items: dokuwiki.farms
-    tags: dokuwiki
 
   - name: dokuwiki | dokuwiki_os_debian7.yml | cleanup and remove _animal
     file: path=/var/www/farm/{{ item }}/_animal state=absent
     remote_user: dokuwiki
     with_items: dokuwiki.farms
-    tags: dokuwiki

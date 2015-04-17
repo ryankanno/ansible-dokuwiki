@@ -3,6 +3,7 @@
 server {
     listen 80;
     root /var/www/dokuwiki;
+    server_name {{ item.name }};
 
     index index.php index.html doku.php;
 
