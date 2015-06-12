@@ -10,10 +10,9 @@ nginx:
 
 php5_fpm:
   package: 'php5-fpm'
-  version: 5.4.39-0+deb7u2
+  version: 5.4.41-0+deb7u1
 
 # dokuwiki
 
 dokuwiki:
   version: 2014-09-29d
-    
