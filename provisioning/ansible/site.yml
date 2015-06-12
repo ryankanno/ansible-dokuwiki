@@ -9,8 +9,14 @@
   - hosts: os_Debian
     sudo: True
     gather_facts: True
+
+    pre_tasks:
+
+      - name: update apt
+        apt: update_cache=yes cache_valid_time=3600
+        when: ansible_distribution == "Debian" and ansible_distribution_version|int == 7
+
     roles:
-     - common
      - { role: nginx, nginx: { vhosts: [{path: 'roles/dokuwiki/templates/dokuwiki.j2', name: 'dokuwiki.local'}]}}
      - php5-fpm
      - { role: dokuwiki, dokuwiki: { farms: ['dokuwiki.local'] }}
