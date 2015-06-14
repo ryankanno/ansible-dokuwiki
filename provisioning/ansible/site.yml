@@ -17,6 +17,6 @@
         when: ansible_distribution == "Debian" and ansible_distribution_version|int == 7
 
     roles:
-     - { role: nginx, nginx: { vhosts: [{path: 'roles/dokuwiki/templates/dokuwiki.j2', name: 'dokuwiki.local'}]}}
+     - { role: nginx, nginx: { vhosts_conf: [{src_path: 'roles/dokuwiki/templates/dokuwiki.j2', target_name: 'dokuwiki.local'}]}}
      - php5-fpm
      - { role: dokuwiki, dokuwiki: { farms: ['dokuwiki.local'] }}
