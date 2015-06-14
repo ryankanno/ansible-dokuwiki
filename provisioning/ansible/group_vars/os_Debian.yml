@@ -1,11 +1,5 @@
 # common
 
-# nginx
-
-nginx:
-  package: nginx
-  version: 1.2.1-2.2+wheezy3
-
 # php5-fpm
 
 php5_fpm:
