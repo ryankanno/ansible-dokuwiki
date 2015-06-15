@@ -6,6 +6,11 @@ php5_fpm:
   package: 'php5-fpm'
   version: 5.4.41-0+deb7u1
 
+# nginx
+nginx:
+  package: nginx
+  version: 1.2.1-2.2+wheezy3
+
 # dokuwiki
 
 dokuwiki:
