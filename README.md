@@ -30,4 +30,5 @@ To play with the install from your machine,
 
 # TODO
 
+* Fix permissions to lib/plugins (should give web permission to write into the folder to install plugins)
 * Add SSL
